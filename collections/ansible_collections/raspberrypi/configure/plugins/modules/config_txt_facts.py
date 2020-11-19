@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 #
 # Copyright: (c) 2020, Toni Wells (@isometimescode)
 # GNU General Public License v3.0+ (see https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -17,6 +18,7 @@ version_added: "1.0.0"
 description: The facts from this module not only includes OS-specific info like timezone and encoding
              but also information about enabled pins and all of the other configuration listed in
              https://www.raspberrypi.org/documentation/configuration/config-txt/
+             https://github.com/RPi-Distro/raspi-config/blob/master/raspi-config
 
 author:
     - Toni Wells (@isometimescode)
@@ -29,22 +31,22 @@ EXAMPLES = r'''
 
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
-ansible_facts:
+ansible_facts.config:
   description: Facts to add to ansible_facts.
   returned: always
   type: dict
   contains:
-    host_timezone:
+    timezone:
       description: The timezone name for this host (can be empty)
       type: str
       returned: always
       sample: 'Europe/London'
-    host_keyboard_layout:
+    keyboard_layout:
       description: The layout for the keyboard (can be empty)
       type: str
       returned: always
       sample: 'gb'
-    host_locale:
+    locale:
       description: The locale for the system (can be empty)
       type: str
       returned: always
@@ -220,8 +222,8 @@ def get_locales():
     output = run_command('localectl', False)
     lines = dict(l.strip().split(': ') for l in output.splitlines() if l)
     return {
-        'host_locale': lines.get('System Locale', '').split('=')[-1],
-        'host_keyboard_layout': lines.get('X11 Layout', '')
+        'locale': lines.get('System Locale', '').split('=')[-1],
+        'keyboard_layout': lines.get('X11 Layout', '')
     }
 
 
@@ -270,12 +272,12 @@ def run_module():
 
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
-    result['ansible_facts'] = {
-        'host_timezone': get_file_contents('/etc/timezone'),
+    result['ansible_facts']['config'] = {
+        'timezone': get_file_contents('/etc/timezone'),
     }
 
-    result['ansible_facts'].update(get_locales())
-    result['ansible_facts'].update(get_raspi_configs())
+    result['ansible_facts']['config'].update(get_locales())
+    result['ansible_facts']['config'].update(get_raspi_configs())
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

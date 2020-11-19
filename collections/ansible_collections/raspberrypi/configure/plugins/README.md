@@ -1,31 +1,62 @@
 # Collections Plugins Directory
 
-This directory can be used to ship various plugins inside an Ansible collection. Each plugin is placed in a folder that
-is named after the type of plugin it is in. It can also include the `module_utils` and `modules` directory that
-would contain module utils and modules respectively.
+Only one plugin is provided in this directory, the [`config_txt_facts`](modules/config_txt_facts.py) module. This module gathers specific facts for the [Raspberry Pi OS](https://www.raspberrypi.org/documentation/configuration/config-txt/); on any other system most values will be blank. Most of the values come from various functions defined in the [`raspi-config` script](https://github.com/RPi-Distro/raspi-config/blob/master/raspi-config).
 
-Here is an example directory of the majority of plugins currently supported by Ansible:
+Assuming you have the following playbook file saved as `example.yml`:
 
-```
-└── plugins
-    ├── action
-    ├── become
-    ├── cache
-    ├── callback
-    ├── cliconf
-    ├── connection
-    ├── filter
-    ├── httpapi
-    ├── inventory
-    ├── lookup
-    ├── module_utils
-    ├── modules
-    ├── netconf
-    ├── shell
-    ├── strategy
-    ├── terminal
-    ├── test
-    └── vars
+```yaml
+- hosts: localhost
+  tasks:
+    - raspberrypi.configure.config_txt_facts:
+    - ansible.builtin.debug: var=ansible_facts.config
 ```
 
-A full list of plugin types can be found at [Working With Plugins](https://docs.ansible.com/ansible/2.10/plugins/plugins.html).
+```sh
+$ ansible-playbook example.yml
+
+PLAY [localhost] **********************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************
+ok: [localhost]
+
+TASK [raspberrypi.configure.config_txt_facts] *****************************************************
+ok: [localhost]
+
+TASK [ansible.builtin.debug] **********************************************************************
+ok: [localhost] => {
+    "ansible_facts.config": {
+        "autologin": "1",
+        "blanking": "0",
+        "boot_cli": "1",
+        "boot_splash": "1",
+        "boot_wait": "0",
+        "bootro_conf": "",
+        "bootro_now": "",
+        "camera": "1",
+        "can_expand": "0",
+        "fan": "1",
+        "fan_gpio": "14",
+        "fan_temp": "80",
+        "hostname": "raspberrypi",
+        "i2c": "1",
+        "keyboard_layout": "gb",
+        "leds": "-1",
+        "locale": "en_GB.UTF-8",
+        "net_names": "1",
+        "onewire": "1",
+        "overlay_conf": "",
+        "overlay_now": "",
+        "overscan": "0",
+        "pi4video": "0",
+        "pi_type": "0",
+        "pixdub": "1",
+        "rgpio": "1",
+        "serial": "0",
+        "serial_hw": "1",
+        "spi": "1",
+        "timezone": "Europe/London",
+        "vnc": "1"
+    },
+    "changed": false
+}
+```
