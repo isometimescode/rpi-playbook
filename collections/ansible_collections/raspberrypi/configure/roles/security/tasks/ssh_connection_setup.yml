@@ -1,0 +1,48 @@
+---
+- delegate_to: localhost
+  when: add_to_known_hosts
+  block:
+    - name: Make sure .ssh directory exists
+      ansible.builtin.file:
+        path: "/root/.ssh"
+        mode: "0700"
+        state: directory
+      changed_when: False
+
+    - name: Make sure known_hosts exists
+      ansible.builtin.file:
+        path: "/root/.ssh/known_hosts"
+        state: touch
+      changed_when: False
+
+    - name: "Get host keys | {{ inventory_hostname }} ({{ ansible_host }})"
+      command: "ssh-keyscan {{ ansible_host }}"
+      register: new_host_keys
+      changed_when: False
+
+    - name: "Add to known_hosts | {{ inventory_hostname }}"
+      ansible.builtin.known_hosts:
+        name: "{{ ansible_host }}"
+        key: "{{ item }}"
+        state: present
+      loop: "{{ new_host_keys.stdout_lines }}"
+      loop_control:
+        label: "keytype {{ item.split(' ')[1] }}"
+      changed_when: False
+
+- delegate_to: localhost
+  when: (private_key_localpath|length > 0) and (private_key_localpath is exists)
+  block:
+    - name: Make sure .ssh directory exists
+      ansible.builtin.file:
+        path: "/root/.ssh"
+        mode: "0700"
+        state: directory
+      changed_when: False
+
+    - name: Copy private key
+      ansible.builtin.copy:
+        src: "{{ private_key_localpath }}"
+        dest: "/root/.ssh/id_rsa"
+        mode: "0600"
+      changed_when: False

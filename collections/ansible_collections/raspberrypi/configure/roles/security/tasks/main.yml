@@ -1,0 +1,20 @@
+---
+###
+# Set user options
+#
+- name: Manage users
+  include_tasks:
+    file: users.yml
+    apply:
+      tags: users
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: users is defined
+
+###
+# Set extra security options
+#
+- import_tasks: extra_security.yml
+  when: extra_security|d(False) == True
+  tags: extra_security
