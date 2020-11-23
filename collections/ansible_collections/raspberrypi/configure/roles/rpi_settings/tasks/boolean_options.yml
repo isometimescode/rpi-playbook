@@ -1,0 +1,5 @@
+---
+
+- name: "Set {{ item.key }} -> {{ parsed_value }}"
+  command: "raspi-config nonint do_{{ item.key }} {{ parsed_value }}"
+  changed_when: (config[item.key] is defined) and config[item.key] != parsed_value

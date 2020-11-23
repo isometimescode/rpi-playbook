@@ -1,0 +1,8 @@
+---
+# Example:
+#
+# boolean_options:
+#   boot_wait: False
+#   vnc: True
+#
+boolean_options: {}
