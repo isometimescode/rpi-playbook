@@ -3,3 +3,8 @@ new_hostname: ""
 timezone: ""
 locale: ""
 keyboard_layout: ""
+packages:
+  install: []
+  uninstall: []
+pip:
+  install: []

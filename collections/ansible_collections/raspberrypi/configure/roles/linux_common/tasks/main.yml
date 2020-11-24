@@ -17,4 +17,4 @@
   command: "raspi-config nonint do_configure_keyboard {{ keyboard_layout }}"
   when: (keyboard_layout|length > 0) and (config.keyboard_layout != keyboard_layout)
 
-# TODO un/install apt packages?
+- import_tasks: software.yml

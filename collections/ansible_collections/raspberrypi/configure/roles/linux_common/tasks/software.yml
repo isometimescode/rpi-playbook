@@ -1,0 +1,19 @@
+---
+- name: Install system packages
+  ansible.builtin.apt:
+    pkg: "{{ packages.install }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 1800
+  when: packages.install is defined and packages.install
+
+- name: Remove system packages
+  ansible.builtin.apt:
+    pkg: "{{ packages.uninstall }}"
+    state: absent
+  when: packages.uninstall is defined and packages.uninstall
+
+- name: Install pip packages
+  ansible.builtin.pip:
+    name: "{{ pip.install }}"
+  when: pip.install
