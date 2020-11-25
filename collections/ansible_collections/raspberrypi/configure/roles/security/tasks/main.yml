@@ -10,11 +10,11 @@
   loop: "{{ users }}"
   loop_control:
     label: "{{ item.name }}"
-  when: users is defined
+  when: users
 
 ###
 # Set extra security options
 #
 - import_tasks: extra_security.yml
-  when: extra_security|d(False) == True
+  when: extra_security
   tags: extra_security

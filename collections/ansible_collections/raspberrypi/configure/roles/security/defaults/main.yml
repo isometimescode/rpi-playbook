@@ -14,3 +14,6 @@ add_to_known_hosts: False
 #
 # private_key_localpath: /playbook/files/common/id_rsa
 private_key_localpath: ""
+
+users: []
+extra_security: False
