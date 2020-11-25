@@ -1,0 +1,27 @@
+---
+ansible_python_interpreter: /usr/bin/python3
+ansible_connection: ssh
+
+locale: "en_US.UTF-8"
+timezone: "America/Los_Angeles"
+keyboard_layout: "us"
+
+# Encrypted secrets are stored in vault.yml but reference
+# them here for easy to search variable names
+#
+password_salt: "{{ vault_password_salt }}"
+
+# Update the default pi user to use a new password
+#
+pi_user_newpw: "{{ vault_pi_user_newpw }}"
+
+# These variables are used in the host_vars/*.yml files to create new users
+# You can define as many as needed
+#
+user1_pw: "{{ vault_user1_pw }}"
+
+# as a string in the vault file
+user1_pubkey: "{{ vault_user1_pubkey }}"
+
+# alternative: grab it from a local file
+# user1_pubkey: "{{ lookup('file', '/playbook/files/common/id_rsa.pub') }}"
