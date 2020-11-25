@@ -1,0 +1,20 @@
+---
+ansible_host: rfgateway.home
+ansible_user: toni
+ansible_ssh_private_key_file: /Users/toni/.ssh/pi_id_rsa
+
+boolean_options:
+  spi: True
+  i2c: True
+
+packages:
+  install:
+    - python3-pip
+
+pip:
+  install:
+    - RPI.GPIO
+    - adafruit-blinka
+    - adafruit-circuitpython-ssd1306
+    - adafruit-circuitpython-framebuf
+    - adafruit-circuitpython-rfm69

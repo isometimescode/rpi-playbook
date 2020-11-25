@@ -1,0 +1,16 @@
+---
+- hosts: configure_hosts
+  become: yes
+  become_user: root
+  become_method: sudo
+  collections:
+    - raspberrypi.configure
+
+  tasks:
+    - config_txt_facts:
+
+    - import_role:
+        name: linux_common
+
+    - import_role:
+        name: rpi_settings
