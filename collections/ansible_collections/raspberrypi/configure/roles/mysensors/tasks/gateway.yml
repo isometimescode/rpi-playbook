@@ -1,0 +1,32 @@
+---
+- name: "Clone MySensors source"
+  ansible.builtin.git:
+    clone: yes
+    update: yes
+    repo: "https://github.com/isometimescode/MySensors.git"
+    dest: "MySensors"
+    version: "rpi"
+
+- name: "Configure MySensors"
+  vars:
+    mys_options: "{{ ' '.join(mysensors.options) }}"
+  command: "./configure {{mys_options}}"
+  args:
+    chdir: "MySensors"
+
+- name: "Install MySensors"
+  become: yes
+  become_user: root
+  become_method: sudo
+  block:
+    - name: "Create MySensors binary"
+      command: "make install"
+      args:
+        chdir: "MySensors"
+      ignore_errors: yes # this command produces a lot of C++ warning noise
+
+    - name: "Enable MySensors service"
+      ansible.builtin.systemd:
+        name: "mysgw.service"
+        state: restarted
+        enabled: yes

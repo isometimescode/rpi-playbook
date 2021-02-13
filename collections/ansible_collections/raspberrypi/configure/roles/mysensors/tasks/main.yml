@@ -1,0 +1,25 @@
+---
+- name: Configure SPI
+  become: yes
+  become_user: root
+  become_method: sudo
+  block:
+    - name: Check for SPI in config.txt
+      ansible.builtin.lineinfile:
+        path: /boot/config.txt
+        regexp: '^#dtparam=spi=on$'
+        line: 'dtparam=spi=on'
+      register: spi
+
+    - name: Rebooting to enable SPI
+      ansible.builtin.reboot:
+      when: spi.changed
+
+# configure, compile and install the gateway code from mysensors.org
+- import_tasks: gateway.yml
+
+# https://github.com/tobof/openhab2-addons/wiki/Installation
+- name: "Download MySensors add-on"
+  ansible.builtin.get_url:
+    url: http://www.oberfoell.com/openhab3/org.openhab.binding.mysensors-3.1.0.jar
+    dest: /usr/share/openhab/addons/org.openhab.binding.mysensors-3.1.0.jar

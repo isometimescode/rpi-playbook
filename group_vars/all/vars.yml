@@ -25,3 +25,5 @@ user1_pubkey: "{{ vault_user1_pubkey }}"
 
 # alternative: grab it from a local file
 # user1_pubkey: "{{ lookup('file', '/playbook/files/common/id_rsa.pub') }}"
+
+rfgateway_password: "{{ vault_rfgateway_password }}"

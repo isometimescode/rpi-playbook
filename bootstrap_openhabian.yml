@@ -1,0 +1,23 @@
+---
+- hosts: bootstrap_openhabian
+  gather_facts: False
+  collections:
+    - raspberrypi.configure
+
+  tasks:
+    - name: setup ssh connection if needed
+      include_role:
+        name: security
+        tasks_from: ssh_connection_setup
+
+    - ansible.builtin.setup:
+
+    - import_role:
+        name: mysensors
+
+    # this has to be last because it changes sudo behavior
+    - import_role:
+        name: security
+      become: yes
+      become_user: root
+      become_method: sudo

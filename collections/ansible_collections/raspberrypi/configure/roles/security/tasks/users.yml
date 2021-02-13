@@ -1,11 +1,4 @@
 ---
-- name: "Create or modify user password | {{ item.name }}"
-  ansible.builtin.user:
-    name: "{{ item.name }}"
-    password: "{{ item.password | password_hash('sha512', password_salt) }}"
-    create_home: yes
-    state: present
-
 - name: "Create or modify user groups | {{ item.name }}"
   ansible.builtin.user:
     name: "{{ item.name }}"
@@ -28,3 +21,10 @@
     state: present
     key: "{{ item.ssh_pub_key }}"
   when: item.ssh_pub_key is defined
+
+- name: "Create or modify user password | {{ item.name }}"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.password | password_hash('sha512', password_salt) }}"
+    create_home: yes
+    state: present
