@@ -1,0 +1,20 @@
+---
+# default connection info
+# https://octoprint.org/download/
+ansible_host: octopi.home
+ansible_user: pi
+ansible_password: raspberry
+ansible_become_pass: raspberry
+
+# set this to use the security tasks in ssh_connection_setup
+add_to_known_hosts: True
+
+users:
+  # Update the password for the default users
+  - name: pi
+    password: "{{ pi_user_newpw }}"
+    ssh_pub_key: "{{ user1_pubkey }}"
+
+# Remove password based logins and remove the default pi user
+# Be careful with this setting as it could make your pi unusable if something is misconfigured
+# extra_security: True

@@ -17,10 +17,10 @@
     - config_txt_facts:
 
     - import_role:
-        name: security
-
-    - import_role:
         name: linux_common
 
     - import_role:
         name: rpi_settings
+
+    - import_role:
+        name: security
