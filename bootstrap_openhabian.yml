@@ -15,6 +15,12 @@
     - import_role:
         name: mysensors
 
+    # https://github.com/tobof/openhab2-addons/wiki/Installation
+    - name: "Download MySensors add-on"
+      ansible.builtin.get_url:
+        url: http://www.oberfoell.com/openhab3/org.openhab.binding.mysensors-3.1.0.jar
+        dest: /usr/share/openhab/addons/org.openhab.binding.mysensors-3.1.0.jar
+
     # this has to be last because it changes sudo behavior
     - import_role:
         name: security

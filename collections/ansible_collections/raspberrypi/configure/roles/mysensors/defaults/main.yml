@@ -1,3 +1,4 @@
 ---
 mysensors:
+  add_spi: False
   options: []
