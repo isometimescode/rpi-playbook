@@ -9,7 +9,7 @@ keyboard_layout: "us"
 # Encrypted secrets are stored in vault.yml but reference
 # them here for easy to search variable names
 #
-password_salt: "{{ vault_password_salt }}"
+password_salt: "{{ vault_password_salt_16 }}"
 
 # Update the default pi user to use a new password
 #
