@@ -7,6 +7,14 @@
     cache_valid_time: 1800
   when: packages.install is defined and packages.install
 
+- name: Enable systemd services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  loop: "{{ packages.services }}"
+  when: packages.services is defined and packages.services
+
 - name: Remove system packages
   ansible.builtin.apt:
     pkg: "{{ packages.uninstall }}"

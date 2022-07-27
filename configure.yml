@@ -3,10 +3,16 @@
   become: yes
   become_user: root
   become_method: sudo
+  gather_facts: False
   collections:
     - raspberrypi.configure
 
   tasks:
+    - name: setup ssh connection if needed
+      include_role:
+        name: security
+        tasks_from: ssh_connection_setup
+
     - config_txt_facts:
 
     - import_role:
@@ -14,3 +20,6 @@
 
     - import_role:
         name: rpi_settings
+
+    - import_role:
+        name: mysensors

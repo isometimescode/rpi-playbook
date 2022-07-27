@@ -27,3 +27,4 @@ user1_pubkey: "{{ vault_user1_pubkey }}"
 # user1_pubkey: "{{ lookup('file', '/playbook/files/common/id_rsa.pub') }}"
 
 rfgateway_password: "{{ vault_rfgateway_password }}"
+mosquitto_pw: "{{ vault_mosquitto_pw }}"

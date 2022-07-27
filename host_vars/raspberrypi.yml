@@ -2,8 +2,8 @@
 # default connection info
 # https://www.raspberrypi.org/documentation/linux/usage/users.md
 ansible_host: raspberrypi.local
-ansible_user: pi
-ansible_password: raspberry
+ansible_user: newpi
+ansible_password: "{{ pi_user_newpw }}"
 
 ### SECURITY ROLE vars ###
 
@@ -20,15 +20,13 @@ users:
     groups: adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,spi,i2c,gpio
     ssh_pub_key: "{{ user1_pubkey }}"
 
-  # Update the password for the default pi user
-  - name: pi
-    password: "{{ pi_user_newpw }}"
-
 # Remove password based logins and remove the default pi user
 # Be careful with this setting as it could make your pi unusable if something is misconfigured
-# extra_security: True
+extra_security: True
 
 ### LINUX_COMMON ROLE vars ###
+
+new_hostname: rfgateway
 
 packages:
   install:

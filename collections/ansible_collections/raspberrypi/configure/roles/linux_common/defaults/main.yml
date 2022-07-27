@@ -6,5 +6,6 @@ keyboard_layout: ""
 packages:
   install: []
   uninstall: []
+  services: []
 pip:
   install: []

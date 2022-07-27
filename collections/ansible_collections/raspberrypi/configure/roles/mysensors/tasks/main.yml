@@ -16,6 +16,10 @@
       ansible.builtin.reboot:
       when: spi.changed
 
+# configure the mqtt/mosquitto gateway
+- import_tasks: mqttgw.yml
+  when: mysensors.mosquitto
+
 # configure, compile and install the gateway code from mysensors.org
-- import_tasks: gateway.yml
+- import_tasks: mysgw.yml
   when: mysensors.options

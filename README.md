@@ -6,7 +6,7 @@ This repository contains a collection with a fact gathering module and a series 
 
 ### Installing Rapsberry Pi OS
 
-1. Create an SD card following the directions from [Raspbian](https://www.raspberrypi.org/software/).
+1. Create an SD card following the directions from [Raspberry Pi OS](https://www.raspberrypi.org/software/).
 2. With your SD card mounted on your local machine, manually copy some additional files to the `boot` directory before you eject the card. This is needed for a headless pi that we connect to via `ssh`.
 - An empty file called `ssh`; this will automatically turn on `sshd` at boot.
 ```
@@ -25,6 +25,7 @@ network={
   key_mgmt=WPA-PSK
 }
 ```
+- A file called `userconfig.txt` to create a new default user. As of [April 2022](https://www.raspberrypi.com/news/raspberry-pi-bullseye-update-april-2022/), Raspberry Pi OS does not come pre-installed with the default `pi` user. Create a new file called `userconf.txt` in the `username:hashed_password` format.
 3. Install your SD card on your device and turn it on.
 
 
