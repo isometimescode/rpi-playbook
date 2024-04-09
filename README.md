@@ -6,36 +6,24 @@ This repository contains a collection with a fact gathering module and a series 
 
 ### Installing Rapsberry Pi OS
 
-1. Create an SD card following the directions from [Raspberry Pi OS](https://www.raspberrypi.org/software/).
-2. With your SD card mounted on your local machine, manually copy some additional files to the `boot` directory before you eject the card. This is needed for a headless pi that we connect to via `ssh`.
-- An empty file called `ssh`; this will automatically turn on `sshd` at boot.
-```
-touch /path/to/your/card/boot/ssh
-```
-- A file called `wpa_supplicant.conf` with your appropriate wifi settings so the pi will join your network automatically. The contents typically look like:
-```
-country=US
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-
-network={
-  scan_ssid=1
-  ssid="YOUR_NETWORK_NAME"
-  psk="YOUR_NETWORK_PASSWORD"
-  key_mgmt=WPA-PSK
-}
-```
-- A file called `userconfig.txt` to create a new default user. As of [April 2022](https://www.raspberrypi.com/news/raspberry-pi-bullseye-update-april-2022/), Raspberry Pi OS does not come pre-installed with the default `pi` user. Create a new file called `userconf.txt` in the `username:hashed_password` format.
+1. Create an SD card use the Raspberry Pi Imager from [Raspberry Pi OS](https://www.raspberrypi.org/software/) to load a new OS on to your SD card.
+2. Make sure to set the settings for:
+  * a new user & password
+  * a new SSH key
+  * the desired hostname
 3. Install your SD card on your device and turn it on.
-
+4. Make sure your chosen hostname is listed in the `inventory.yml` file
 
 ### Installing Ansible
 
 There are [official Ansible steps](https://docs.ansible.com/ansible/latest/installation_guide/index.html) to install the Ansible CLI on your local machine (or any other machine) you will be using as a controller node.
 
-Another option is to use a [Docker image](https://github.com/isometimescode/docker-ansible-playbook):
+### Running the Playbook
 
-```
-docker pull isometimescode/ansible-playbook:latest
-docker run -it --rm -v $(pwd)/playbook:/playbook isometimescode/ansible-playbook /playbook/yourplaybook.yml
-```
+`ansible-playbook playbook.yml`
+
+Alternatively, you can use tags:
+
+`ansible-playbook -t software playbook.yml` --> to install software only
+
+`ansible-playbook --skip-tags init playbook.yml` --> to run everything except the initial rpi provisioning
