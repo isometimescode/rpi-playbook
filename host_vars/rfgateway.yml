@@ -1,10 +1,5 @@
 ---
-ansible_host: rfgateway.home
-ansible_user: toni
-ansible_ssh_private_key_file: /Users/toni/.ssh/pi_id_rsa
-ansible_become_pass: "{{ user1_pw }}"
-
-boolean_options:
+boolean_raspi_config:
   spi: True
   i2c: True
 
@@ -20,20 +15,14 @@ packages:
 pip:
   install:
     - RPI.GPIO
-    # - adafruit-blinka
-    # - adafruit-circuitpython-ssd1306
-    # - adafruit-circuitpython-framebuf
-    # - adafruit-circuitpython-rfm69
 
 ### MySensors ROLE vars ###
 mysensors:
   add_spi: False
 
-  # configure mosquitto gateway auth
+  # configure mosquitto gateway & auth
   # ex: mosquitto_passwd -c files/mosquitto_passwd <username>
-  mosquitto:
-    pw_src_file: "/playbook/files/mosquitto_passwd"
-    conf_src_file: "/playbook/files/mosquitto.conf"
+  mosquitto: True
 
   # passed directly to /configure
   options:
@@ -46,7 +35,7 @@ mysensors:
     - "--my-rfm69-cs-pin=26"
     - '--extra-cxxflags="-DMY_RFM69_RST_PIN=22"'
     - "--my-is-rfm69hw"
-    - "--my-security-password={{ rfgateway_password }}"
+    - "--my-security-password={{ vault_rfgateway_password }}"
     - "--my-rfm95-encryption-enabled"
     - "--my-gateway=mqtt"
     - "--my-controller-ip-address=127.0.0.1"
@@ -54,4 +43,4 @@ mysensors:
     - "--my-mqtt-subscribe-topic-prefix=mysensors-in"
     - "--my-mqtt-client-id=mygateway1"
     - "--my-mqtt-user=automation"
-    - "--my-mqtt-password={{ mosquitto_pw }}"
+    - "--my-mqtt-password={{ vault_mosquitto_pw }}"

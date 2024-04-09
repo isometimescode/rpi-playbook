@@ -1,0 +1,22 @@
+---
+- name: "Update timezone | {{ timezone|d('(none)', true) }}"
+  command: "raspi-config nonint do_change_timezone {{ timezone }}"
+  when: (timezone|length > 0) and (config.timezone != timezone)
+
+- name: "Update locale | {{ locale|d('none', true) }}"
+  command: "raspi-config nonint do_change_locale {{ locale }}"
+  when: (locale|length > 0) and (config.locale != locale)
+
+- name: "Update keyboard layout | {{ keyboard_layout|d('none', true) }}"
+  command: "raspi-config nonint do_configure_keyboard {{ keyboard_layout }}"
+  when: (keyboard_layout|length > 0) and (config.keyboard_layout != keyboard_layout)
+
+- name: Read simple boolean options
+  include_tasks:
+    file: boolean_options.yml
+  vars:
+    parsed_value: "{{ 0 if item.value else 1 }}"
+  loop: "{{ boolean_raspi_config | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: boolean_raspi_config

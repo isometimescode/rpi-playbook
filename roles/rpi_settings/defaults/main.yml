@@ -1,0 +1,12 @@
+---
+# Example:
+#
+# boolean_raspi_config:
+#   boot_wait: False
+#   vnc: True
+#
+timezone: ""
+locale: ""
+keyboard_layout: ""
+
+boolean_raspi_config: {}

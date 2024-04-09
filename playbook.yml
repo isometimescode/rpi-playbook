@@ -1,0 +1,29 @@
+---
+
+- name: Raspberry Pi Hosts
+  hosts: raspberries
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: False
+  vars_files:
+    - host_vars/vault.yml
+
+  tasks:
+    - name: Initial rpi configs
+      tags: init
+      block:
+      - config_txt_facts:
+      - import_role:
+          name: rpi_settings
+
+    - name: Software installs
+      tags: software
+      import_role:
+        name: common
+
+    - name: Gateway specific installs
+      tags: gateway
+      import_role:
+        name: mysensors
+      when: inventory_hostname == 'rfgateway'

@@ -1,0 +1,14 @@
+---
+
+# main group of rapsberry pis
+raspberries:
+  vars:
+    ansible_connection: ssh
+    ansible_user: toni
+    ansible_ssh_private_key_file: "/Users/toni/.ssh/pi_id_rsa"
+    locale: "en_US.UTF-8"
+    timezone: "America/Los_Angeles"
+    keyboard_layout: "us"
+
+  hosts:
+    rfgateway:

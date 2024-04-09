@@ -1,0 +1,64 @@
+---
+- name: "Clone MySensors source"
+  ansible.builtin.git:
+    clone: yes
+    update: yes
+    repo: "https://github.com/mysensors/MySensors"
+    dest: "MySensors"
+    version: development
+    depth: 1
+    single_branch: yes
+  register: gitclone
+
+- name: "Configure MySensors"
+  vars:
+    mys_options: "{{ ' '.join(mysensors.options) }}"
+  command: "./configure {{mys_options}}"
+  args:
+    chdir: "MySensors"
+
+- name: "Install MySensors"
+  become: yes
+  become_user: root
+  become_method: sudo
+  block:
+    - name: "Create MySensors binary"
+      command: "make install"
+      args:
+        chdir: "MySensors"
+      ignore_errors: yes # this command produces a lot of C++ warning noise
+
+    - name: "Enable MySensors service"
+      ansible.builtin.systemd:
+        name: "mysgw.service"
+        state: restarted
+        enabled: yes
+
+    # the first run of the service will create a mysensors.conf file
+    # so the modifications must happen after service start
+    - name: Turn on logging
+      ansible.builtin.lineinfile:
+        path: /etc/mysensors.conf
+        regexp: '^log_file='
+        line: 'log_file=1'
+      register: logging1
+
+    - name: Create log file path
+      ansible.builtin.file:
+        path: /var/log/mysgw/
+        state: directory
+
+    - name: Configure log file path
+      ansible.builtin.lineinfile:
+        path: /etc/mysensors.conf
+        regexp: '^log_filepath='
+        line: 'log_filepath=/var/log/mysgw/mysgw.log'
+      register: logging2
+
+    - name: "Restart MySensors service"
+      ansible.builtin.systemd:
+        name: "mysgw.service"
+        state: restarted
+        enabled: yes
+        daemon_reload: true
+      when: logging1.changed or logging2.changed
