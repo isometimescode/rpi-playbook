@@ -16,6 +16,14 @@ common_pip:
   install:
     - RPI.GPIO
 
+### Docker
+docker_apt_arch: armhf # required because this one is 32 bit legacy os install
+docker_users:
+  - "{{ ansible_user }}"
+# common_docker_compose:
+#   files:
+#     - apprise-api.yml
+
 ### MySensors ROLE vars ###
 mysensors_data:
   add_spi: false
@@ -44,8 +52,3 @@ mysensors_data:
     - --my-mqtt-client-id=mygateway1
     - --my-mqtt-user=automation
     - --my-mqtt-password={{ vault_mosquitto_pw }}
-
-### Docker
-docker_apt_arch: armhf # required because this one is 32 bit legacy os install
-docker_users:
-  - "{{ ansible_user }}"

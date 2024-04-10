@@ -1,0 +1,16 @@
+---
+- name: "Adding {{ project_name }}"
+  ansible.builtin.file:
+    path: "{{ project_name }}"
+    state: directory
+    mode: u=rwx,g=r,o=r
+
+- name: Copying compose file
+  ansible.builtin.copy:
+    src: "{{ inventory_hostname + '/' + item }}"
+    dest: "{{ project_name + '/compose.yml' }}"
+    mode: u=rw,g=r,o=r
+
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: "{{ project_name }}"

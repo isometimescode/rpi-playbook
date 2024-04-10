@@ -23,9 +23,6 @@
         - name: Common software
           ansible.builtin.import_role:
             name: common
-        - name: Docker
-          ansible.builtin.import_role:
-            name: geerlingguy.docker
 
     - name: Gateway specific installs
       tags: gateway

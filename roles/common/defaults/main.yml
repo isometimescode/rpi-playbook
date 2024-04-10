@@ -5,3 +5,5 @@ common_packages:
   services: []
 common_pip:
   install: []
+common_docker_compose:
+  files: []

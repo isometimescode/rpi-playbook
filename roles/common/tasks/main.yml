@@ -10,7 +10,7 @@
 - name: Enable systemd services
   ansible.builtin.systemd:
     name: "{{ item }}"
-    state: restarted
+    state: started
     enabled: true
   loop: "{{ common_packages.services }}"
   when: common_packages.services is defined and common_packages.services
@@ -25,3 +25,16 @@
   ansible.builtin.pip:
     name: "{{ common_pip.install }}"
   when: common_pip.install
+
+- name: Install & manage Docker
+  when: common_docker_compose.files is defined and common_docker_compose.files
+  block:
+    - name: Install docker-ce
+      ansible.builtin.import_role:
+        name: geerlingguy.docker
+    - name: Add docker-compose projects
+      vars:
+        project_name: "{{ item|splitext|first }}"
+      ansible.builtin.include_tasks:
+        file: docker-project.yml
+      loop: "{{ common_docker_compose.files }}"
