@@ -4,7 +4,6 @@
   become: true
   become_user: root
   become_method: ansible.builtin.sudo
-  gather_facts: false
   vars_files:
     - host_vars/vault.yml
 
@@ -20,8 +19,13 @@
 
     - name: Software installs
       tags: software
-      ansible.builtin.import_role:
-        name: common
+      block:
+        - name: Common software
+          ansible.builtin.import_role:
+            name: common
+        - name: Docker
+          ansible.builtin.import_role:
+            name: geerlingguy.docker
 
     - name: Gateway specific installs
       tags: gateway

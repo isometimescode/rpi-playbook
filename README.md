@@ -20,10 +20,21 @@ There are [official Ansible steps](https://docs.ansible.com/ansible/latest/insta
 
 ### Running the Playbook
 
-`ansible-playbook playbook.yml`
+1. Make sure dependencies are installed:
+```
+ansible-galaxy install -r requirements.yml
+```
 
-Alternatively, you can use tags:
+2. Run the entire playbook:
+```
+ansible-playbook playbook.yml
+```
 
-`ansible-playbook -t software playbook.yml` --> to install software only
+3. Alternatively, you can use tags:
+```
+# run just the software tasks
+ansible-playbook -t software playbook.yml
 
-`ansible-playbook --skip-tags init playbook.yml` --> to run everything except the initial rpi provisioning
+# run everything except the initial rpi provisioning
+ansible-playbook --skip-tags init playbook.yml
+```
