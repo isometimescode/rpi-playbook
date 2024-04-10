@@ -1,22 +1,22 @@
 ---
-- name: "Update timezone | {{ timezone|d('(none)', true) }}"
-  command: "raspi-config nonint do_change_timezone {{ timezone }}"
-  when: (timezone|length > 0) and (config.timezone != timezone)
+- name: Update timezone | {{ rpi_settings_timezone | d('(none)', true) }}
+  ansible.builtin.command: raspi-config nonint do_change_timezone {{ rpi_settings_timezone }}
+  when: (rpi_settings_timezone|length > 0) and (config.timezone != rpi_settings_timezone)
 
-- name: "Update locale | {{ locale|d('none', true) }}"
-  command: "raspi-config nonint do_change_locale {{ locale }}"
-  when: (locale|length > 0) and (config.locale != locale)
+- name: Update locale | {{ rpi_settings_locale | d('none', true) }}
+  ansible.builtin.command: raspi-config nonint do_change_locale {{ rpi_settings_locale }}
+  when: (rpi_settings_locale|length > 0) and (config.locale != rpi_settings_locale)
 
-- name: "Update keyboard layout | {{ keyboard_layout|d('none', true) }}"
-  command: "raspi-config nonint do_configure_keyboard {{ keyboard_layout }}"
-  when: (keyboard_layout|length > 0) and (config.keyboard_layout != keyboard_layout)
+- name: Update keyboard layout | {{ rpi_settings_keyboard_layout | d('none', true) }}
+  ansible.builtin.command: raspi-config nonint do_configure_keyboard {{ rpi_settings_keyboard_layout }}
+  when: (rpi_settings_keyboard_layout|length > 0) and (config.keyboard_layout != rpi_settings_keyboard_layout)
 
 - name: Read simple boolean options
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: boolean_options.yml
   vars:
     parsed_value: "{{ 0 if item.value else 1 }}"
-  loop: "{{ boolean_raspi_config | dict2items }}"
+  loop: "{{ rpi_settings_boolean_config | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: boolean_raspi_config
+  when: rpi_settings_boolean_config

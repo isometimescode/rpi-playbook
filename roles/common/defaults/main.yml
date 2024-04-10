@@ -1,7 +1,7 @@
 ---
-packages:
+common_packages:
   install: []
   uninstall: []
   services: []
-pip:
+common_pip:
   install: []

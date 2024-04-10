@@ -1,64 +1,65 @@
 ---
-- name: "Clone MySensors source"
+- name: Clone MySensors source
   ansible.builtin.git:
-    clone: yes
-    update: yes
-    repo: "https://github.com/mysensors/MySensors"
-    dest: "MySensors"
+    clone: true
+    update: true
+    repo: https://github.com/mysensors/MySensors
+    dest: MySensors
     version: development
     depth: 1
-    single_branch: yes
+    single_branch: true
   register: gitclone
 
-- name: "Configure MySensors"
+- name: Configure MySensors
   vars:
-    mys_options: "{{ ' '.join(mysensors.options) }}"
-  command: "./configure {{mys_options}}"
+    mys_options: "{{ ' '.join(mysensors_data.options) }}"
+  ansible.builtin.command: ./configure {{ mys_options }}
   args:
-    chdir: "MySensors"
+    chdir: MySensors
 
-- name: "Install MySensors"
-  become: yes
+- name: Install MySensors
+  become: true
   become_user: root
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   block:
-    - name: "Create MySensors binary"
-      command: "make install"
+    - name: Create MySensors binary
+      ansible.builtin.command: make install
       args:
-        chdir: "MySensors"
-      ignore_errors: yes # this command produces a lot of C++ warning noise
+        chdir: MySensors
+      ignore_errors: true # this command produces a lot of C++ warning noise
 
-    - name: "Enable MySensors service"
+    - name: Enable MySensors service
       ansible.builtin.systemd:
-        name: "mysgw.service"
+        name: mysgw.service
         state: restarted
-        enabled: yes
+        enabled: true
 
     # the first run of the service will create a mysensors.conf file
     # so the modifications must happen after service start
     - name: Turn on logging
       ansible.builtin.lineinfile:
         path: /etc/mysensors.conf
-        regexp: '^log_file='
-        line: 'log_file=1'
+        regexp: ^log_file=
+        line: log_file=1
       register: logging1
 
     - name: Create log file path
       ansible.builtin.file:
         path: /var/log/mysgw/
         state: directory
+        mode: u=rwx
 
     - name: Configure log file path
       ansible.builtin.lineinfile:
         path: /etc/mysensors.conf
-        regexp: '^log_filepath='
-        line: 'log_filepath=/var/log/mysgw/mysgw.log'
+        regexp: ^log_filepath=
+        line: log_filepath=/var/log/mysgw/mysgw.log
       register: logging2
 
-    - name: "Restart MySensors service"
+    - name: Restart MySensors service
       ansible.builtin.systemd:
-        name: "mysgw.service"
+        name: mysgw.service
         state: restarted
-        enabled: yes
+        enabled: true
         daemon_reload: true
       when: logging1.changed or logging2.changed

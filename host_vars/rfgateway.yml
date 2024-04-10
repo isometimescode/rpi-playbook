@@ -1,9 +1,9 @@
 ---
-boolean_raspi_config:
-  spi: True
-  i2c: True
+rpi_settings_boolean_config:
+  spi: true
+  i2c: true
 
-packages:
+common_packages:
   install:
     - python3-pip
     - git
@@ -12,35 +12,35 @@ packages:
   services:
     - mosquitto
 
-pip:
+common_pip:
   install:
     - RPI.GPIO
 
 ### MySensors ROLE vars ###
-mysensors:
-  add_spi: False
+mysensors_data:
+  add_spi: false
 
   # configure mosquitto gateway & auth
   # ex: mosquitto_passwd -c files/mosquitto_passwd <username>
-  mosquitto: True
+  mosquitto: true
 
   # passed directly to /configure
   options:
-    - "--my-debug=enable"
-    - "--spi-driver=SPIDEV"
-    - "--spi-spidev-device=/dev/spidev0.1"
-    - "--my-transport=rfm69"
-    - "--my-rfm69-frequency=915"
-    - "--my-rfm69-irq-pin=15"
-    - "--my-rfm69-cs-pin=26"
-    - '--extra-cxxflags="-DMY_RFM69_RST_PIN=22"'
-    - "--my-is-rfm69hw"
-    - "--my-security-password={{ vault_rfgateway_password }}"
-    - "--my-rfm95-encryption-enabled"
-    - "--my-gateway=mqtt"
-    - "--my-controller-ip-address=127.0.0.1"
-    - "--my-mqtt-publish-topic-prefix=mysensors-out"
-    - "--my-mqtt-subscribe-topic-prefix=mysensors-in"
-    - "--my-mqtt-client-id=mygateway1"
-    - "--my-mqtt-user=automation"
-    - "--my-mqtt-password={{ vault_mosquitto_pw }}"
+    - --my-debug=enable
+    - --spi-driver=SPIDEV
+    - --spi-spidev-device=/dev/spidev0.1
+    - --my-transport=rfm69
+    - --my-rfm69-frequency=915
+    - --my-rfm69-irq-pin=15
+    - --my-rfm69-cs-pin=26
+    - --extra-cxxflags="-DMY_RFM69_RST_PIN=22"
+    - --my-is-rfm69hw
+    - --my-security-password={{ vault_rfgateway_password }}
+    - --my-rfm95-encryption-enabled
+    - --my-gateway=mqtt
+    - --my-controller-ip-address=127.0.0.1
+    - --my-mqtt-publish-topic-prefix=mysensors-out
+    - --my-mqtt-subscribe-topic-prefix=mysensors-in
+    - --my-mqtt-client-id=mygateway1
+    - --my-mqtt-user=automation
+    - --my-mqtt-password={{ vault_mosquitto_pw }}

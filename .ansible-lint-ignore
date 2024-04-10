@@ -1,0 +1,6 @@
+# This file contains ignores rule violations for ansible-lint
+roles/mysensors/tasks/main.yml no-handler
+roles/mysensors/tasks/mysgw.yml ignore-errors
+roles/mysensors/tasks/mysgw.yml no-changed-when
+roles/rpi_settings/tasks/boolean_options.yml name[template]
+roles/rpi_settings/tasks/main.yml no-changed-when

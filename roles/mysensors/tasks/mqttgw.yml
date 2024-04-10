@@ -1,25 +1,27 @@
 ---
-- name: "Configure Mosquitto"
-  become: yes
+- name: Configure Mosquitto
+  become: true
   become_user: root
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   block:
-    - name: "Stop mosquitto service"
+    - name: Stop mosquitto service
       ansible.builtin.systemd:
         name: mosquitto
         state: stopped
 
-    - name: "Copy password file"
+    - name: Copy password file
       ansible.builtin.copy:
         src: "{{ inventory_hostname }}/mosquitto_passwd"
         dest: /etc/mosquitto/passwd
+        mode: u=rw
 
-    - name: "Copy config file"
+    - name: Copy config file
       ansible.builtin.copy:
         src: mosquitto.conf
         dest: /etc/mosquitto/conf.d/custom.conf
+        mode: u=rw,g=r,o=r
 
-    - name: "Restart mosquitto service"
+    - name: Restart mosquitto service
       ansible.builtin.systemd:
         name: mosquitto
         state: restarted

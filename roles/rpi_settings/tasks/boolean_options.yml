@@ -1,9 +1,8 @@
 ---
-
 # this tranlsates human readable values like True
 # to the value 0, which is what raspi-config expects
 #
-- name: "Set {{ item.key }} -> {{ parsed_value }}"
-  command: "raspi-config nonint do_{{ item.key }} {{ parsed_value }}"
+- name: Set {{ item.key }} -> {{ parsed_value }}
+  ansible.builtin.command: raspi-config nonint do_{{ item.key }} {{ parsed_value }}
   when: (config[item.key] is defined) and config[item.key] != parsed_value
   changed_when: (config[item.key] is defined) and config[item.key] != parsed_value

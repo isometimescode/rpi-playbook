@@ -5,8 +5,8 @@
 #   boot_wait: False
 #   vnc: True
 #
-timezone: ""
-locale: ""
-keyboard_layout: ""
+rpi_settings_timezone: ""
+rpi_settings_locale: ""
+rpi_settings_keyboard_layout: ""
 
-boolean_raspi_config: {}
+rpi_settings_boolean_config: {}

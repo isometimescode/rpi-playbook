@@ -1,11 +1,10 @@
 ---
-
 - name: Raspberry Pi Hosts
   hosts: raspberries
-  become: yes
+  become: true
   become_user: root
-  become_method: sudo
-  gather_facts: False
+  become_method: ansible.builtin.sudo
+  gather_facts: false
   vars_files:
     - host_vars/vault.yml
 
@@ -13,17 +12,19 @@
     - name: Initial rpi configs
       tags: init
       block:
-      - config_txt_facts:
-      - import_role:
-          name: rpi_settings
+        - name: Gather rpi config
+          config_txt_facts:
+        - name: Update rpi config
+          ansible.builtin.import_role:
+            name: rpi_settings
 
     - name: Software installs
       tags: software
-      import_role:
+      ansible.builtin.import_role:
         name: common
 
     - name: Gateway specific installs
       tags: gateway
-      import_role:
+      ansible.builtin.import_role:
         name: mysensors
       when: inventory_hostname == 'rfgateway'
