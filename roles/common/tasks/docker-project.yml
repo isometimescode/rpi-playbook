@@ -1,5 +1,5 @@
 ---
-- name: "Adding {{ project_name }}"
+- name: Adding {{ project_name }}
   ansible.builtin.file:
     path: "{{ project_name }}"
     state: directory

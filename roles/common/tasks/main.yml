@@ -34,7 +34,7 @@
         name: geerlingguy.docker
     - name: Add docker-compose projects
       vars:
-        project_name: "{{ item|splitext|first }}"
+        project_name: "{{ item | splitext | first }}"
       ansible.builtin.include_tasks:
         file: docker-project.yml
       loop: "{{ common_docker_compose.files }}"
