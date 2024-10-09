@@ -6,9 +6,11 @@ raspberries:
     ansible_connection: ssh
     ansible_user: toni
     ansible_ssh_private_key_file: /Users/toni/.ssh/pi_id_rsa
+    ansible_python_interpreter: /usr/bin/python
     rpi_settings_locale: en_US.UTF-8
     rpi_settings_timezone: America/Los_Angeles
     rpi_settings_keyboard_layout: us
 
   hosts:
     rfgateway:
+    hoggle.local:

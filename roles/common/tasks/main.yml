@@ -3,7 +3,6 @@
   ansible.builtin.apt:
     pkg: "{{ common_packages.install }}"
     state: present
-    update_cache: true
     cache_valid_time: 1800
   when: common_packages.install is defined and common_packages.install
 
@@ -38,3 +37,7 @@
       ansible.builtin.include_tasks:
         file: docker-project.yml
       loop: "{{ common_docker_compose.files }}"
+
+- name: Install & configure Mosquitto/MQTT
+  ansible.builtin.import_tasks: mqttgw.yml
+  when: common_install_mqtt

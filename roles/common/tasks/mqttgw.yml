@@ -1,0 +1,29 @@
+---
+- name: Install mosquitto package
+  ansible.builtin.apt:
+    pkg: mosquitto
+    state: present
+    cache_valid_time: 1800
+
+- name: Enable systemd mosquitto service
+  ansible.builtin.systemd:
+    name: mosquitto
+    state: stopped
+    enabled: true
+
+- name: Copy password file
+  ansible.builtin.copy:
+    src: "{{ inventory_hostname }}/mosquitto_passwd"
+    dest: /etc/mosquitto/passwd
+    mode: u=rw
+
+- name: Copy config file
+  ansible.builtin.copy:
+    src: mosquitto.conf
+    dest: /etc/mosquitto/conf.d/custom.conf
+    mode: u=rw,g=r,o=r
+
+- name: Restart mosquitto service
+  ansible.builtin.systemd:
+    name: mosquitto
+    state: restarted

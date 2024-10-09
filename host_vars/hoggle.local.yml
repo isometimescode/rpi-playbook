@@ -1,0 +1,9 @@
+common_packages:
+  install:
+    - git
+    - tree
+    - unattended-upgrades
+  services:
+    - unattended-upgrades
+
+common_install_mqtt: true

@@ -7,3 +7,4 @@ common_pip:
   install: []
 common_docker_compose:
   files: []
+common_install_mqtt: false

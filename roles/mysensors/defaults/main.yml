@@ -2,4 +2,3 @@
 mysensors_data:
   add_spi: false
   options: []
-  mosquitto: true
